@@ -1,0 +1,54 @@
+name: Compile LaTeX
+
+on:
+  push:
+    paths:
+      - '**/*.tex'
+      - '**/*.bib'
+      - '**/*.cls'
+      - '**/*.sty'
+      - '.github/workflows/latex.yml'
+  pull_request:
+    paths:
+      - '**/*.tex'
+      - '**/*.bib'
+      - '**/*.cls'
+      - '**/*.sty'
+      - '.github/workflows/latex.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX documents
+        shell: bash
+        run: |
+          set -e
+          mapfile -t files < <(find . -name '*.tex' -not -path './.git/*' | sort)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No .tex files found; nothing to compile."
+            exit 0
+          fi
+          for f in "${files[@]}"; do
+            dir=$(dirname "$f")
+            base=$(basename "$f")
+            echo "::group::Compiling $f"
+            (cd "$dir" && latexmk -pdf -interaction=nonstopmode -halt-on-error "$base")
+            echo "::endgroup::"
+          done
+
+      - name: Upload compiled PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-pdfs
+          path: '**/*.pdf'
+          if-no-files-found: ignore
