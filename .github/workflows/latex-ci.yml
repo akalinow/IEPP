@@ -9,16 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    container: docker://texlive/texlive:latest
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
-    - name: Install LaTeX
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-polish
-    
+
     - name: Find and compile all LaTeX files
       run: |
         # Find all .tex files in the repository
