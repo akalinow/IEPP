@@ -37,14 +37,14 @@ jobs:
           dir=$(dirname "$tex_file")
           file=$(basename "$tex_file")
           stem=${file%.tex}
-          build_dir="$dir/.ci-build"
+          build_dir=".ci-build"
 
           echo "=========================================="
           echo "Compiling: $tex_file"
           echo "=========================================="
 
-          mkdir -p "$build_dir"
           cd "$dir"
+          mkdir -p "$build_dir"
 
           # Default build: solutions hidden, output to a unique PDF name
           if pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}" "$file" >/tmp/latex_default.log 2>&1; then
