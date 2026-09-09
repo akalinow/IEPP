@@ -18,7 +18,7 @@
 \usepackage{xspace}
 \xspaceaddexceptions{[]\{\}}
 
-\def\showsolutions{}  %← show solutions. Comment out to hide solutions
+%\def\hidesolutions{}  %← show solutions. Comment out to show solutions
 
 %
 %
@@ -64,17 +64,17 @@
 %dynamic solutions hiding
 \usepackage{comment}
 
-\newif\ifshowsolutions
-\ifdefined\showsolutions
-  \showsolutionstrue
+\newif\ifhidesolutions
+\ifdefined\hidesolutions
+  \hidesolutionstrue
 \else
-  \showsolutionsfalse
+  \hidesolutionsfalse
 \fi
 
-\ifshowsolutions
-  \newenvironment{solution}{\vspace{1cm} \par\textbf{Solution.} \vspace{1cm}}{}
-\else
+\ifhidesolutions
   \excludecomment{solution}
+\else
+  \newenvironment{solution}{\vspace{1cm} \par\textbf{Solution.} \vspace{1cm}}{}
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}         

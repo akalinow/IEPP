@@ -45,25 +45,25 @@ jobs:
 
           cd "$dir"
 
-          # Default build: solutions hidden, output to a unique PDF name
-          if pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}" "$file" >/tmp/latex_default.log 2>&1; then
-            pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}" "$file" >/tmp/latex_default_2.log 2>&1
-            echo "✓ Hidden-solutions build successful: $tex_file -> ${stem}.pdf"
+          # Default build: solutions shown, output to a unique PDF name
+          if pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}_with_solutions" "$file" >/tmp/latex_default.log 2>&1; then
+            pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}_with_solutions" "$file" >/tmp/latex_default_2.log 2>&1
+            echo "✓ Shown-solutions build successful: $tex_file -> ${stem}_with_solutions.pdf"
           else
-            echo "✗ Hidden-solutions build failed: $tex_file"
+            echo "✗ Shown-solutions build failed: $tex_file"
             cat /tmp/latex_default.log
             failed=$((failed + 1))
             cd - > /dev/null
             continue
           fi
 
-          # Alternate build: solutions shown via definition switch, output to a different PDF name
-          if pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions.log 2>&1; then
-            pdflatex -interaction=nonstopmode -halt-on-error  -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions_2.log 2>&1
-            echo "✓ Shown-solutions build successful: $tex_file -> ${stem}_with_solutions.pdf"
+          # Alternate build: solutions hidden via definition switch, output to a different PDF name
+          if pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}" "\def\hidesolutions{} \input{$file}" >/tmp/latex_with_solutions.log 2>&1; then
+            pdflatex -interaction=nonstopmode -halt-on-error  -jobname="${stem}" "\def\hidesolutions{} \input{$file}" >/tmp/latex_with_solutions_2.log 2>&1
+            echo "✓ Shown-solutions build successful: $tex_file -> ${stem}.pdf"
           else
             echo "✗ Shown-solutions build failed: $tex_file"
-            cat /tmp/latex_with_solutions.log
+            cat /tmp/latex_without_solutions.log
             failed=$((failed + 1))
           fi
 
@@ -83,9 +83,6 @@ jobs:
         fi
 
         echo "All LaTeX files compiled successfully!"
-        pwd
-        ls
-        ls -ltr Set_1
     
     - name: Upload PDF artifacts
       if: success()
