@@ -44,11 +44,10 @@ jobs:
           echo "=========================================="
 
           cd "$dir"
-          mkdir -p "$build_dir"
 
           # Default build: solutions hidden, output to a unique PDF name
-          if pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}" "$file" >/tmp/latex_default.log 2>&1; then
-            pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}" "$file" >/tmp/latex_default_2.log 2>&1
+          if pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}" "$file" >/tmp/latex_default.log 2>&1; then
+            pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}" "$file" >/tmp/latex_default_2.log 2>&1
             echo "✓ Hidden-solutions build successful: $tex_file -> ${stem}.pdf"
           else
             echo "✗ Hidden-solutions build failed: $tex_file"
@@ -59,8 +58,8 @@ jobs:
           fi
 
           # Alternate build: solutions shown via definition switch, output to a different PDF name
-          if pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions.log 2>&1; then
-            pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions_2.log 2>&1
+          if pdflatex -interaction=nonstopmode -halt-on-error -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions.log 2>&1; then
+            pdflatex -interaction=nonstopmode -halt-on-error  -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions_2.log 2>&1
             echo "✓ Shown-solutions build successful: $tex_file -> ${stem}_with_solutions.pdf"
           else
             echo "✗ Shown-solutions build failed: $tex_file"
@@ -86,13 +85,12 @@ jobs:
         echo "All LaTeX files compiled successfully!"
         pwd
         ls
-        ls Set_1
-        ls */*.pdf
+        ls -ltr Set_1
     
     - name: Upload PDF artifacts
       if: success()
       uses: actions/upload-artifact@v4
       with:
         name: compiled-pdfs
-        path: "*/*/*.pdf"
+        path: "**/*.pdf"
         retention-days: 7
