@@ -91,7 +91,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \zadanie[Physical constants]
 
-Please calculate numerical values following physical constants:
+Please calculate numerical values of the following physical constants:
 \begin{itemize}
 \item $\hbar c$ in MeV$\cdot$fm units    
 \item $\alpha = \frac{e^{2}}{4 \pi \epsilon_0 \hbar c}$
@@ -99,11 +99,11 @@ Please calculate numerical values following physical constants:
 
 \vspace{0.2cm}
 
-using $h$ and $c$ values from CODATA 2022:
+using values from CODATA 2022:
 \begin{itemize}
 \item $h = 6.626 \times 10^{-34}\,\mathrm{J\,s}$
 \item $c = 2.998 \times 10^8\,\mathrm{m/s}$
-\item $1 \mathrm{e} = 1.602 \times 10^{-19}\,\mathrm{C}$
+\item $\mathrm{e} = 1.602 \times 10^{-19}\,\mathrm{C}$
 \item $\epsilon_0 = 8.854 \times 10^{-12}\,\mathrm{F/m}$
 \end{itemize}
 
@@ -126,18 +126,16 @@ Fine structure constant $\alpha$:
 
 
 \end{solution}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \zadanie[Rutherford backscattering]
 
-Please calculate cross section for back-scattering: $\theta = \pi \pm 5^\circ$ of 
+Please calculate cross section for backscattering: $\theta = \pi \pm 5^\circ$ of 
 $\alpha$ particles with energy $E_\alpha = 5.3$ MeV
 on a gold foil. Use nonrelativistic Rutherford formula, taking into account
 the nucleus recoil. The gold nucleus has charge $Z=79$ and mass $M = 197$ u. 
-Alpha particle has mass $m_\alpha = 4$ u. Assume $\theta = \pi$ for the whole
-backscattering range. 
+Alpha particle has mass $m_\alpha = 4$ u. Use, and justify approximation for 
+the Rutherford formula angle dependency.
 
 \vspace{0.2cm}
 
@@ -170,7 +168,7 @@ The normalisation factor in the Rutherford formula is given by:
 \frac{Z e^2}{4\pi \epsilon_0} = Z \alpha \hbar c = 79 \cdot \frac{1}{137} \cdot 197.3 \text{ MeV fm} = 113.5~\text{MeV fm}
 \end{align*}
 
-Differential crosssection at $\theta = \pi$ is given by:
+Differential cross section at $\theta = \pi$ is given by:
 \begin{align*}
 \frac{d\sigma}{d\Omega} = 
 \left( \frac{113.5~\text{MeV fm}}{4 \cdot 5.2~\text{MeV} \cdot \sin^2(\pi/2)} \right)^2 = 
@@ -235,6 +233,30 @@ m_\pi c^{2} \approx \frac{\hbar c}{r_0} = \frac{197~\text{MeV fm}}{2~\text{fm}} 
 \end{align*}
 
 \end{solution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\zadanie[Neutrino hypothesis]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Find in the literature electron energy distribution in the $\beta$ decay.
+Sketch the distribution and explain why the neutrino hypothesis was proposed.
+
+\begin{solution}
+
+The electron spectrum in the $\beta$ decay is continuous,
+ which was unexpected, as the energy of the electron should be 
+ discrete if only two particles were involved in the decay. 
+ This led to the proposal of the neutrino hypothesis by Wolfgang Pauli, 
+ suggesting that an additional particle (the neutrino) is emitted in the 
+ decay, carrying away some of the energy and momentum, thus explaining 
+ the continuous spectrum observed for the electrons.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{e_spectrum_beta_decay.png}
+\end{figure}
+
+
+\end{solution}
+
+
 \end{document}

@@ -19,60 +19,70 @@ jobs:
       run: |
         # Find all .tex files in the repository
         tex_files=$(find . -name "set*.tex" -type f)
-        
+
         if [ -z "$tex_files" ]; then
           echo "No .tex files found in the repository"
           exit 1
         fi
-        
+
         echo "Found LaTeX files:"
         echo "$tex_files"
         echo ""
-        
-        # Compile each .tex file
+
         failed=0
+        total=0
+
         for tex_file in $tex_files; do
+          total=$((total + 1))
+          dir=$(dirname "$tex_file")
+          file=$(basename "$tex_file")
+          stem=${file%.tex}
+          build_dir="$dir/.ci-build"
+
           echo "=========================================="
           echo "Compiling: $tex_file"
           echo "=========================================="
-          
-          # Change to the directory containing the .tex file
-          dir=$(dirname "$tex_file")
-          file=$(basename "$tex_file")
-          
+
+          mkdir -p "$build_dir"
           cd "$dir"
-          
-          # Try to compile the file
-          # Run pdflatex twice to resolve references
-          if pdflatex -interaction=nonstopmode -halt-on-error "$file"; then
-            echo "First pass successful"
-            pdflatex -interaction=nonstopmode -halt-on-error "$file"
-            echo "✓ Successfully compiled: $tex_file"
+
+          # Default build: solutions hidden, output to a unique PDF name
+          if pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}" "$file" >/tmp/latex_default.log 2>&1; then
+            pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}" "$file" >/tmp/latex_default_2.log 2>&1
+            echo "✓ Hidden-solutions build successful: $tex_file -> ${stem}.pdf"
           else
-            echo "✗ Failed to compile: $tex_file"
+            echo "✗ Hidden-solutions build failed: $tex_file"
+            cat /tmp/latex_default.log
+            failed=$((failed + 1))
+            cd - > /dev/null
+            continue
+          fi
+
+          # Alternate build: solutions shown via definition switch, output to a different PDF name
+          if pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions.log 2>&1; then
+            pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" -jobname="${stem}_with_solutions" "\def\showsolutions{} \input{$file}" >/tmp/latex_with_solutions_2.log 2>&1
+            echo "✓ Shown-solutions build successful: $tex_file -> ${stem}_with_solutions.pdf"
+          else
+            echo "✗ Shown-solutions build failed: $tex_file"
+            cat /tmp/latex_with_solutions.log
             failed=$((failed + 1))
           fi
-          
-          # Return to the original directory
+
           cd - > /dev/null
           echo ""
         done
-        
-        # Report results
+
         echo "=========================================="
         echo "Compilation Summary"
         echo "=========================================="
-        total=$(echo "$tex_files" | wc -l)
-        successful=$((total - failed))
         echo "Total files: $total"
-        echo "Successful: $successful"
         echo "Failed: $failed"
-        
+
         if [ $failed -gt 0 ]; then
           echo "Some LaTeX files failed to compile"
           exit 1
         fi
-        
+
         echo "All LaTeX files compiled successfully!"
     
     - name: Upload PDF artifacts
