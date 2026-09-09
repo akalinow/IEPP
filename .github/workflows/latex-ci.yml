@@ -86,6 +86,8 @@ jobs:
         echo "All LaTeX files compiled successfully!"
         pwd
         ls
+        ls Set_1
+        ls */*.pdf
     
     - name: Upload PDF artifacts
       if: success()
