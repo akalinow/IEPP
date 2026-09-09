@@ -84,11 +84,13 @@ jobs:
         fi
 
         echo "All LaTeX files compiled successfully!"
+        pwd
+        ls
     
     - name: Upload PDF artifacts
       if: success()
       uses: actions/upload-artifact@v4
       with:
         name: compiled-pdfs
-        path: "**/*.pdf"
+        path: "*/*/*.pdf"
         retention-days: 7
