@@ -1,0 +1,282 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{wrapfig}    % for wrapping figures, tables
+\usepackage{isotope}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{gensymb}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xspace}
+\xspaceaddexceptions{[]\{\}}
+
+%\def\hidesolutions{}  %← show solutions. Comment out to show solutions
+
+%
+%
+%fixpagesize
+\pagestyle{empty}
+\addtolength{\textwidth}{4cm}
+\addtolength{\textheight}{6cm}
+\addtolength{\evensidemargin}{-3cm}
+\addtolength{\oddsidemargin}{-2cm}
+\addtolength{\topmargin}{-3cm}
+\parindent=0cm
+
+%
+%
+% Changes figure placing algorithm
+\renewcommand{\topfraction}{1}       % maximal fraction of a page allowed for figures
+\renewcommand{\textfraction}{0.15}   % minimal number of text for figure-text shared pages
+\renewcommand{\floatpagefraction}{0.95} % if two above does not help, this could do the job 
+                                        % must be: floatpagefraction < topfraction !!!!
+\renewcommand{\textfraction}{0} % minimum fraction of page, which must be  devoted to text
+\renewcommand{\topfraction}{1}  % maximum fraction at top, which can be occupied whit floats
+\setcounter{totalnumber}{400}   % increase the number of floats for one page
+\setcounter{topnumber}{200}     % at all/top/bottom.
+\setcounter{bottomnumber}{200}  %
+
+%
+%
+%small distance in list/item/enum for enumitem package
+\setlist[itemize,enumerate]{topsep=0em}
+\setlist{noitemsep}
+
+%Nuclear notations: usage \nucl{235}{92}{U}. Math mode optional
+\newcommand{\nucl}[3]{\ensuremath{
+  \phantom{\ensuremath{^{#1}_{#2}}}
+  \llap{\ensuremath{^{#1}}}
+  \llap{\ensuremath{_{\rule{0pt}{.75em}#2}}}
+  \mbox{#3} } 
+} 
+
+\newcounter{zadanie}\newcommand{\zadanie}[1][]{\addtocounter{zadanie}{1} ~\\  {\bf \emph{Exercise \arabic{zadanie} #1 }} \\}
+\newcounter{zaddom}\newcommand{\zaddom}[1][]{\addtocounter{zaddom}{1} ~\\  {\bf \emph{Homework \arabic{zaddom} #1 }} \\}
+
+%dynamic solutions hiding
+\usepackage{comment}
+
+\newif\ifhidesolutions
+\ifdefined\hidesolutions
+  \hidesolutionstrue
+\else
+  \hidesolutionsfalse
+\fi
+
+\ifhidesolutions
+  \excludecomment{solution}
+\else
+  \newenvironment{solution}{\vspace{1cm} \par\textbf{Solution.} \vspace{1cm}}{}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}         
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{centering}
+  {\bf {\Large
+ Introduction to Experimental Particle Physics I \\
+  Set III: Lorentz transformation, cross section, decay width, branching ratio
+  }} \\  
+\end{centering}
+
+\vspace{1cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\zadanie[Boosts and rotations]
+
+Calculate numerical values of Lorentz transformation matrix composed of two boosts
+along $\vec{\beta}_1 = (0.6,0,0)$ and $\vec{\beta}_2 = (0, 0.6,0)$.
+Calculate the same for a single, combined, boost along $\vec{\beta}_3 = (0.6, 0.48, 0)$.
+\begin{itemize}
+  \item make numerical checks if resulting matrices represent a Lorentz transformation, 
+  \item explain why combined boost is along $\vec{\beta}_3 = (0.6, 0.48, 0)$ and not 
+  along $\vec{\beta}_1 + \vec{\beta}_2 = (0.6, 0.6, 0)$,
+  \item compare the results and discuss the difference.
+\end{itemize}
+
+\vspace{0.2cm}
+Use Numpy to perform matrix multiplications, and submit solution in form of a short ipynb 
+notebook with calculations and checks.
+
+\begin{solution}
+
+Lorentz matrix for a boost along $\vec{\beta}_1 = (0.6,0,0)$ is:
+\begin{align*}
+  \Lambda_1 = \begin{pmatrix}
+    \gamma_1 & -\beta_1 \gamma_1 & 0 & 0 \\
+    -\beta_1 \gamma_1 & \gamma_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} = \begin{pmatrix}
+    1.25 & -0.75 & 0 & 0 \\
+    -0.75 & 1.25 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix}
+\end{align*}
+
+Matrix validity test: $\Lambda_1^T g \Lambda_1 = g$:
+\begin{align*}
+  \Lambda_1^T g \Lambda_1 = \begin{pmatrix}
+    1.25 & -0.75 & 0 & 0 \\
+    -0.75 & 1.25 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} \begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    0 & 0 & 0 & -1
+  \end{pmatrix} \begin{pmatrix}
+    1.25 & -0.75 & 0 & 0 \\
+    -0.75 & 1.25 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} = \begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    0 & 0 & 0 & -1
+  \end{pmatrix} = g
+\end{align*}
+
+Determinant of $\Lambda_1$ is $det(\Lambda_1) = 1.25 \cdot 1.25 - (-0.75) \cdot (-0.75) = 1$.
+
+
+Lorentz matrix for a boost along $\vec{\beta}_2 = (0,0.6,0)$ is:
+\begin{align*}
+  \Lambda_2 = \begin{pmatrix}
+    \gamma_2 & 0 & -\beta_2 \gamma_2 & 0 \\
+    0 & 1 & 0 & 0 \\
+    -\beta_2 \gamma_2 & 0 & \gamma_2 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} = \begin{pmatrix}
+    1.25 & 0 & -0.75 & 0 \\
+    0 & 1 & 0 & 0 \\
+    -0.75 & 0 & 1.25 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix}
+\end{align*}
+
+\vspace{0.5cm}
+
+Metric conservation test: $\Lambda_2^T g \Lambda_2 = g$:
+\begin{align*}
+  \Lambda_2^T g \Lambda_2 = \begin{pmatrix}
+    1.25 & 0 & -0.75 & 0 \\
+    0 & 1 & 0 & 0 \\
+    -0.75 & 0 & 1.25 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} \begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    0 & 0 & 0 & -1
+  \end{pmatrix} \begin{pmatrix}
+    1.25 & 0 & -0.75 & 0 \\
+    0 & 1 & 0 & 0 \\
+    -0.75 & 0 & 1.25 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} = \begin{pmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    0 & 0 & 0 & -1
+  \end{pmatrix} = g
+\end{align*}
+
+Determinant test: $det(\Lambda_2) = 1.25 \cdot 1.25 - (-0.75) \cdot (-0.75) = 1$.
+
+\vspace{0.5cm}
+
+Matrix for consecutive boosts along $\vec{\beta}_1$ and $\vec{\beta}_2$ is:
+\begin{align*}
+  \Lambda_{12} = \Lambda_2 \Lambda_1 = \begin{pmatrix}
+    1.5625 & -0.9375 & -0.9375 & 0 \\
+    -0.75 & 1.25 & 0 & 0 \\
+    -0.9375 & 0.5625 & 1.5625 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix}
+\end{align*}
+
+Matrix for a single boost along $\vec{\beta}_3 = (0.6, 0.48, 0)$ is:
+\begin{align*}
+  \Lambda_3 = \begin{pmatrix}
+    \gamma_3 & -\beta_{3x} \gamma_3 & -\beta_{3y} \gamma_3 & 0 \\
+    -\beta_{3x} \gamma_3 & 1 + (\gamma_3 - 1) \frac{\beta_{3x}^2}{\beta_3^2} & (\gamma_3 - 1) \frac{\beta_{3x}\beta_{3y}}{\beta_3^2} & 0 \\
+    -\beta_{3y} \gamma_3 & (\gamma_3 - 1) \frac{\beta_{3x}\beta_{3y}}{\beta_3^2} & 1 + (\gamma_3 - 1) \frac{\beta_{3y}^2}{\beta_3^2} & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix} = \begin{pmatrix}
+    1.5625 & -0.9375 & -0.75 & 0 \\
+    -0.9375 & 1.343 & 0.2744 & 0 \\
+    -0.75 & 0.2744 & 1.2195 & 0 \\
+    0 & 0 & 0 & 1
+  \end{pmatrix}
+\end{align*}
+
+The combined boost along $\vec{\beta}_3$ takes into account the relativistic velocity addition formula, 
+which results in a different effective velocity than the naive sum of $\vec{\beta}_1$ and $\vec{\beta}_2$.
+The boost along combined direction effects in a pure boost and a rotation (Thomas-Wigner rotation) in the plane of 
+the two boosts, which is why the resulting matrix $\Lambda_3$ differs from $\Lambda_{12}$.
+
+\end{solution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifdefined\hidesolutions
+  \newpage
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\zadanie[Two body decay phase space]
+
+Calculate the width for a two body decay of a particle with mass $M$ into two 
+particles with masses $m_1$ and $m_2$. Assume general form of decay matrix element 
+$|\mathcal{M}|^2$, and leave this as it is in the final formula. Consider two cased:
+\begin{itemize}
+  \item final state particles are different, $m_1 \neq m_2$,
+  \item final state particles are identical, $m_1 = m_2$.
+\end{itemize}
+
+\begin{solution}
+  The width of the decay is given by:
+  \begin{align*}
+    \Gamma = \frac{1}{2M} \int \frac{d^3p_1}{(2\pi)^3 2E_1} \frac{d^3p_2}{(2\pi)^3 2E_2} (2\pi)^4 \delta^4(p - p_1 - p_2) |\mathcal{M}|^2
+  \end{align*}
+  
+  where $p$ is the four-momentum of the decaying particle, and $p_1$ and $p_2$ are the four-momenta of the decay products.
+  We consider the rest frame of the decaying particle, where $p = (M, 0, 0, 0)$.
+
+  \begin{align*}
+    \Gamma = & \frac{1}{2M} \int \frac{d^3p_1}{(2\pi)^3 2E_1} \frac{d^3p_2}{(2\pi)^3 2E_2} (2\pi)^3 \delta^4(\vec{p} - \vec{p_1} - \vec{p_2}) 
+    (2\pi) \delta(M - E_1 - E_2) |\mathcal{M}|^2 = \\
+    & | \text{integrate over } d^3p_2 \text{ using the delta function } \delta^3(\vec{p} - \vec{p_1} - \vec{p_2}) | = \\
+    & \frac{1}{2M} \int \frac{d^3p_1}{(2\pi)^3 2E_1} \frac{1}{(2\pi)^3 2E_2} (2\pi)^4 \delta(M - E_1 - E_2) |\mathcal{M}|^2 = \\
+    & \frac{1}{2M} \int \frac{p_{1}^{2}dp_1 d\Omega_1}{(2\pi)^3 2E_1} \frac{1}{(2\pi)^3 2E_2} (2\pi)^4 \delta(M - E_1 - E_2) |\mathcal{M}|^2 = \\
+    & | \delta(M - E_1 - E_2) = \delta(M - \sqrt{|\vec{p}_1|^2 + m_1^2} + \sqrt{|\vec{p}_1|^2 + m_2^2}) =  \\
+    & \delta(p_{1} - p^{*}) \left( \frac{p_{1}}{E_{1}} + \frac{p_{1}}{E_{2}} \right)^{-1} = 
+      \delta(p_{1} - p^{*}) \frac{E_{1} E_{2}}{p_{1} (E_{1} + E_{2})} = \\
+    & || E_1 + E_2 = M || = 
+     \delta(p_{1} - p^{*}) \frac{E_{1} E_{2}}{p_{1} M} =  \\
+    & \frac{1}{2M} \frac{(2\pi)^4 p^{*}}{(2\pi)^6 4M} \int  |\mathcal{M}|^2 d\Omega = \\
+    & | \text{assume particle is decaying isotropically, then} |\mathcal{M}| \\
+    & \text{does not depend on the direction of the decay products} | = \\
+    &\frac{1}{2M} \frac{(2\pi)^4 p^{*}}{(2\pi)^6 4M} |\mathcal{M}|^2 4\pi = 
+     \frac{p^{*}}{8\pi M^2} |\mathcal{M}|^2
+  \end{align*}
+
+For identical particles in the final state, we need to include a factor of $\frac{1}{2}$ 
+to account for the indistinguishability of the particles, which means we should integrate only 
+over half of the solid angle. Therefore, the width for identical particles is:
+\begin{align*}
+  \Gamma_{identical} = \frac{1}{2} \frac{p^{*}}{8\pi M^2} |\mathcal{M}|^2 = \frac{p^{*}}{16\pi M^2} |\mathcal{M}|^2
+\end{align*}
+
+\end{solution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
