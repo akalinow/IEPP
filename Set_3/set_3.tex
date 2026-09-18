@@ -74,7 +74,7 @@
 \ifhidesolutions
   \excludecomment{solution}
 \else
-  \newenvironment{solution}{\vspace{1cm} \par\textbf{Solution.} \vspace{1cm}}{}
+  \newenvironment{solution}{\vspace{1cm} \par\textbf{Solution.} \vspace{1cm}}{\newpage}
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}         
@@ -228,9 +228,6 @@ the two boosts, which is why the resulting matrix $\Lambda_3$ differs from $\Lam
 
 \end{solution}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ifdefined\hidesolutions
-  \newpage
-\fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \zadanie[Two body decay phase space]
 
