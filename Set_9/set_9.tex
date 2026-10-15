@@ -1,0 +1,274 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{wrapfig}    % for wrapping figures, tables
+\usepackage{isotope}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{gensymb}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xspace}
+\xspaceaddexceptions{[]\{\}}
+
+%\def\hidesolutions{}  %← show solutions. Comment out to show solutions
+
+%
+%
+%fixpagesize
+\pagestyle{empty}
+\addtolength{\textwidth}{4cm}
+\addtolength{\textheight}{6cm}
+\addtolength{\evensidemargin}{-3cm}
+\addtolength{\oddsidemargin}{-2cm}
+\addtolength{\topmargin}{-3cm}
+\parindent=0cm
+
+%
+%
+% Changes figure placing algorithm
+\renewcommand{\topfraction}{1}       % maximal fraction of a page allowed for figures
+\renewcommand{\textfraction}{0.15}   % minimal number of text for figure-text shared pages
+\renewcommand{\floatpagefraction}{0.95} % if two above does not help, this could do the job 
+                                        % must be: floatpagefraction < topfraction !!!!
+\renewcommand{\textfraction}{0} % minimum fraction of page, which must be  devoted to text
+\renewcommand{\topfraction}{1}  % maximum fraction at top, which can be occupied whit floats
+\setcounter{totalnumber}{400}   % increase the number of floats for one page
+\setcounter{topnumber}{200}     % at all/top/bottom.
+\setcounter{bottomnumber}{200}  %
+
+%
+%
+%small distance in list/item/enum for enumitem package
+\setlist[itemize,enumerate]{topsep=0em}
+\setlist{noitemsep}
+
+%Nuclear notations: usage \nucl{235}{92}{U}. Math mode optional
+\newcommand{\nucl}[3]{\ensuremath{
+  \phantom{\ensuremath{^{#1}_{#2}}}
+  \llap{\ensuremath{^{#1}}}
+  \llap{\ensuremath{_{\rule{0pt}{.75em}#2}}}
+  \mbox{#3} } 
+} 
+
+\newcounter{zadanie}\newcommand{\zadanie}[1][]{\addtocounter{zadanie}{1} ~\\  {\bf \emph{Exercise \arabic{zadanie} #1 }} \\}
+\newcounter{zaddom}\newcommand{\zaddom}[1][]{\addtocounter{zaddom}{1} ~\\  {\bf \emph{Homework \arabic{zaddom} #1 }} \\}
+
+%dynamic solutions hiding
+\usepackage{comment}
+
+\newif\ifhidesolutions
+\ifdefined\hidesolutions
+  \hidesolutionstrue
+\else
+  \hidesolutionsfalse
+\fi
+
+\ifhidesolutions
+  \excludecomment{solution}
+\else
+  \newenvironment{solution}{\vspace{1cm} \par\textbf{Solution.} \vspace{1cm}}{\newpage}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}         
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{centering}
+  {\bf {\Large
+ Introduction to Experimental Particle Physics I \\
+  Set XI: accelerators \\
+  }}   
+\end{centering}
+
+\vspace{1cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\zadanie[Synchrotron radiation]
+
+Find the rletivistic (=involving $dp^{\mu}/d\tau$) Larmor formula for power radiated by a charge under arbitrary acceleration. 
+Derive formulas for two limiting cases:
+\begin{itemize}
+  \item $P_{L}$ - longitudinal acceleration,
+  \item $P_{T}$ - transverse acceleration, with negligible energy gain
+\end{itemize}
+
+\vspace{0.5cm}
+
+{\bf Hint:} assume particle is relativistic: 
+$\beta \simeq 1$, 
+
+\vspace{0.5cm}
+
+Then calculate energy loss per turn in MeV for:
+\begin{enumerate}
+  \item proton in LHC at the top energy of 6.3 TeV
+  \item electron in LEP at the top energy of 104 GeV
+\end{enumerate}
+
+Assume:
+\begin{itemize}
+  \item bending radius $\rho = 2803$ m 
+  \item accelerating gradient $dE/dx = 5$ MeV/m
+\end{itemize}
+
+{\bf Hint:} create Python notebook for calculations. 
+
+
+\begin{solution}
+
+  Larmor formula for power radiated by a charge under acceleration:
+\begin{align*}
+  P = -\frac{e^{2}}{4\pi \epsilon_0} \frac{2}{3} \frac{1}{m^{2}c^3}  \frac{dp^{\mu}}{d\tau}\frac{dp_{\mu}}{d\tau} 
+\end{align*}
+
+Linear acceleration:
+\begin{align*}
+  & \frac{dp^{\mu}}{d\tau}\frac{dp_{\mu}}{d\tau} = \left[\frac{1}{c^{2}} \frac{dE}{d\tau}\frac{dE}{d\tau} - \frac{d\vec{p}}{d\tau}\cdot\frac{d\vec{p}}{d\tau}\right] = \\
+  & || \tau = \gamma t \qquad |\vec{p}| = \beta E \\
+  &    m^{2} = (E/c)^{2} - p^{2} \to E/c^{2}dE = pdp\\
+  & dp = \frac{E}{p c^{2}} dE =  \frac{1}{\beta c^{2}} dE || \\
+  & \frac{\gamma^{2}}{c^{2}} \left[\left( \frac{dE}{dt} \right)^{2} - \frac{1}{\beta^{2}} \left(\frac{dE}{dt} \right)^{2} \right] = \\
+  & \frac{1}{c^{2}} \frac{\gamma^{2}}{\beta^{2}} \left( \frac{dE}{dt} \right)^{2} (\beta^{2} - 1) = -\frac{1}{\beta^{2}c^{2}} \left( \frac{dE}{dt} \right)^{2}
+\end{align*}
+
+So:
+\begin{align*}
+  & P_{L} = \frac{e^{2}}{4\pi \epsilon_0} \frac{2}{3} \frac{1}{m^{2}\beta^{2}c^5}  \left( \frac{dE}{dt} \right)^{2} = \\
+  & || \beta \simeq 1 \to  ct = x|| \\
+  & P_{L} = \frac{e^{2}}{4\pi \epsilon_0} \frac{2}{3} \frac{1}{m^{2}c^3}  \left( \frac{dE}{dx} \right)^{2}  
+\end{align*}
+
+
+Transverse acceleration:
+\begin{align*}
+  & \frac{dp^{\mu}}{d\tau}\frac{dp_{\mu}}{d\tau} = \frac{dE}{d\tau}\frac{dE}{d\tau} - \frac{d\vec{p}}{d\tau}\cdot\frac{d\vec{p}}{d\tau} = \\
+  & || \tau = \gamma t \qquad dE \ll dp \qquad \frac{d\vec{p}}{dt} = \vec{\omega} \times \vec{p} || = \\
+ & - \gamma^{2} (\omega \cdot |\vec{p}|)^{2} 
+\end{align*}
+
+So: 
+\begin{align*}
+  & P_{T} = \frac{e^{2}}{4\pi \epsilon_0} \frac{2}{3} \frac{\gamma^{2}}{m^{2}c^3}  (\omega \cdot |\vec{p}|)^{2} = \\
+  & || \omega = \frac{\beta c}{\rho} \qquad |\vec{p}| = \gamma \beta c m|| \\
+  & P_{T} = \frac{e^{2}}{4\pi \epsilon_0} \frac{2}{3} \frac{\gamma^{4} \beta^{4}c}{\rho^{2}}
+\end{align*}
+
+Energy lost per turn:
+\begin{align*}
+  & E_{L} = P_{L} \cdot \frac{2\pi \rho}{\beta c} = \frac{e^{2}}{3\epsilon_0} \frac{\rho}{m^{2}c^{4} \beta}  \left( \frac{dE}{dx} \right)^{2} \\
+  & E_{T} = P_{T} \cdot \frac{2\pi \rho}{\beta c} = \frac{e^{2}}{3\epsilon_0} \frac{\gamma^{4} \beta^{3}}{\rho}
+\end{align*}
+
+
+Numerical calculations for LHC and LEP:
+\begin{align*}
+  & E_{L}^{LHC} = \frac{e^{2}}{3\epsilon_0} \frac{\rho}{m_{p}^{2}c^{4} \beta}  \left( \frac{dE}{dx} \right)^{2} \simeq 4\cdot 10^{-16} \text{ MeV} \\
+  & E_{T}^{LHC} = \frac{e^{2}}{3\epsilon_0} \frac{\gamma^{4} \beta^{3}}{\rho} \simeq 5 \cdot 10^{-3} \text{ MeV} \\
+  & E_{L}^{LEP} = \frac{e^{2}}{3\epsilon_0} \frac{\rho}{m_{e}^{2}c^{4} \beta}  \left( \frac{dE}{dx} \right)^{2} \simeq 1.6 \cdot 10^{-9} \text{ MeV} \\
+  & E_{T}^{LEP} = \frac{e^{2}}{3\epsilon_0} \frac{\gamma^{4} \beta^{3}}{\rho} \simeq 4956 \text{ MeV} \\
+\end{align*}
+
+\end{solution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\zadanie[M\o ller factor]
+
+The cross section is defined as ratio of the reaction 
+rate to the flux, F, of incoming particles:
+\begin{align*}
+  \sigma = \frac{R}{F}
+\end{align*}
+
+Reaction rate per volume and time element is:
+\begin{align*}
+  R = \frac{dN}{dV dt} = \frac{dN}{d^{3}x dt} = \frac{dN}{d^{4}x}
+\end{align*}
+
+The cross section is a Lorentz invariant quantity. Please:
+\begin{itemize}
+  \item show that the reaction rate is a Lorentz invariant quantity,
+  \item read about the M\o ller factor, and a Lorentz invariant flux
+\end{itemize}
+
+
+
+
+\begin{solution}
+
+{\bf Reaction rate:} the numerator is just a number of occurrences, which is Lorentz invariant. The denominator is a volume element in 4D space-time, which is also Lorentz invariant. Therefore, the reaction rate is a Lorentz invariant quantity.
+Denominator is a volume element in 4D space-time, which is also Lorentz invariant, 
+as can be shown using the Jacobian of the Lorentz transformation: 
+\begin{align*}
+  d^{4}x' = \det(\Lambda) d^{4}x = | \lambda \in SO(1, 3)  \to det(\Lambda)=1 | = d^{4}x
+\end{align*}
+
+Therefore, the reaction rate is a Lorentz invariant quantity.
+
+\vspace{1cm}
+
+{\bf The flux:}
+Nonrelativistc flux is defined as:
+\begin{align*}
+  F = n_{1} n_{2} v_{12}
+\end{align*}
+where $n_{1}$ and $n_{2}$ are the number densities of the two colliding particle beams, 
+and $v_{12}$ is the {\bf observed} velocity which two beams approach each one in the laboratory frame. 
+This is not relative velocity, and can be greater than $c$. Let us construct the Lorentz invariant flux that will be equal to nonrelativistic flux 
+in the LAB frame.
+
+We start from the target rest frame, denoted with star, where 
+we have $v_{rel} = v_{1}^{*}$, and $n_{1}^{*}, n_{2}^{*}$ are densities of the two colliding particle beams in the target rest frame.
+The value of the flux in the target rest frame is:
+\begin{align*}
+  F = n_{1}^{*} n_{2}^{*} v_{1}^{*}
+\end{align*}
+
+We want $F$ to be Lorentz invariant, so we have to express it by invariant quantities.
+Particle density transformation from rest frame to LAB frame is:
+\begin{align*}
+  & n^{0} = \frac{N}{V} = \frac{N}{A \cdot L} \\
+  & n^{LAB} = \frac{N}{A \cdot L^{LAB}} = \frac{N}{A \cdot L} \frac{L}{L^{LAB}} = \\
+  & || L^{LAB} = L \gamma || \to \\
+  & n^{LAB} = \gamma n^{0}
+\end{align*}
+
+Beam densities in the target rest frame:
+\begin{align*}
+  & n_{1}^{*} = \frac{n_{1}^{LAB}}{\gamma_{1}} \\
+  & n_{2}^{*} = n^{0} \gamma_{12} = \frac{n_{2}^{LAB}}{\gamma_{2}} \gamma_{12} 
+\end{align*}
+
+Relative velocity in the target rest frame is:
+\begin{align*}
+  v_{rel} = v_{1}^{*} = \frac{\sqrt{(\vec{v}_{1} - \vec{v}_{2})^{2} - (\vec{v}_{1} \times \vec{v}_{2})^2}}{1 - \vec{v}_{1}\vec{v}_{2}}
+\end{align*}
+
+and corresponding Lorentz factor is:
+\begin{align*}
+  \gamma_{rel} = \frac{1}{\sqrt{1 - v_{rel}^{2}}} = 
+  \gamma_{1} \gamma_{2} (1 - \vec{v}_{1} \cdot \vec{v}_{2})
+\end{align*}
+
+Finally, the flux in the target rest frame is:
+\begin{align*}
+  F = \frac{n_{1}^{LAB}}{\gamma_{1}}\frac{n_{2}^{LAB}}{\gamma_{2}} \gamma_{1} \gamma_{2} (1 - \vec{v}_{1} \cdot \vec{v}_{2}) v_{rel} = \\
+  = n_{1}^{LAB} n_{2}^{LAB}\sqrt{(\vec{v}_{1} - \vec{v}_{2})^{2} - (\vec{v}_{1} \times \vec{v}_{2})^2}
+\end{align*}
+
+
+
+{\bf References:}
+\href{https://cds.cern.ch/record/941318/files/p361.pdf}{Concept of liminosity},~
+\href{https://www.osti.gov/servlets/purl/836235}{The M\o ller luminosity factor}
+
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
